@@ -1,0 +1,34 @@
+//Level of recursion is each box here 
+#include<bits/stdc++.h>
+using namespace std;
+
+void permutationTwo(int nBoxes, int rItems, int ssf, string asf, int currLevel, set<int> itemsVisited){
+    //Base Case
+    if(currLevel > nBoxes){
+        if(ssf == rItems){
+            cout << asf << endl;
+        }
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = 1; i <= rItems; i++){
+        if(itemsVisited.find(i) == itemsVisited.end()){
+            itemsVisited.insert(i);
+            permutationTwo(nBoxes, rItems, ssf+1, asf+to_string(i), currLevel+1, itemsVisited);
+             itemsVisited.erase(i);
+        }
+        
+    }
+    permutationTwo(nBoxes, rItems, ssf, asf+'0', currLevel+1, itemsVisited);
+    
+}
+
+int main(){
+    int nBoxes, rItems;
+    cin >> nBoxes >> rItems;
+   
+    set<int> itemsVisited;
+    permutationTwo(nBoxes, rItems, 0, "", 1, itemsVisited);
+    return 0;
+}
