@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void queenPermutations(int n, int row, int col, string asf, int count){
+    if(row ==  n){
+        if(count == n){
+        cout << asf << endl;
+     }
+     return;
+    }
+    
+    int nr = 0;
+    int nc = 0;
+    char sepr = '\0';
+    
+    if(col == n-1){
+        nr = row+1;
+        nc = 0;
+        sepr = '\n';
+    }
+    else{
+        nr = row;
+        nc = col+1;
+        sepr = '\t';
+    }
+    
+     queenPermutations(n, nr, nc, sepr=='\n'?asf+"q"+sepr:asf+"q", count+1);
+     queenPermutations(n, nr, nc, sepr=='\n'?asf+"-"+sepr:asf+"-", count);
+    
+}
+
+int main(){
+    int n;
+    cin >> n;
+  
+    queenPermutations(n, 0, 0,"", 0);
+    return 0;
+}
