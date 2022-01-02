@@ -1,0 +1,35 @@
+#include<iostream>
+using namespace std;
+
+void permutationTwo(char* nBoxesArray, int nBoxes, int rItems, int currItem, int llb){
+    //Base Case
+    if(currItem > rItems){
+        for(int i = 0; i < nBoxes; i++){
+            cout << nBoxesArray[i];
+        }
+        cout << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = llb+1; i < nBoxes; i++){
+        if(nBoxesArray[i] == '-'){
+            nBoxesArray[i] = 'i';
+            permutationTwo(nBoxesArray, nBoxes, rItems, currItem+1, i);
+                nBoxesArray[i] = '-';
+        
+        }
+    }
+}
+
+int main(){
+    int nBoxes, rItems;
+    cin >> nBoxes >> rItems;
+    
+    char* nBoxesArray = new char[nBoxes];
+    for(int i = 0; i < nBoxes; i++){
+        nBoxesArray[i] = '-';
+    }
+    permutationTwo(nBoxesArray, nBoxes, rItems, 1, -1);
+    return 0;
+}
