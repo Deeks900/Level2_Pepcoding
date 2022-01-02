@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void queenPermutations(string** chess, int n, int currLevel){
+    //Base Case
+    if(currLevel > n){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                cout << chess[i][j] << "\t";
+            }
+            cout << endl;
+        }
+        cout << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            if(chess[i][j] == "-"){
+                chess[i][j] = "q"+to_string(currLevel);
+                queenPermutations(chess, n, currLevel+1);
+                chess[i][j] = "-";
+            }
+            
+            
+        }
+    }
+}
+int main(){
+    int n;
+    cin >> n;
+    
+    string** chess = new string*[n];
+    for(int i = 0; i < n; i++){
+        chess[i] = new string[n];
+        for(int j = 0; j < n; j++){
+            chess[i][j] = "-";
+        }
+    }
+    
+    queenPermutations(chess, n, 1);
+    return 0;
+}
