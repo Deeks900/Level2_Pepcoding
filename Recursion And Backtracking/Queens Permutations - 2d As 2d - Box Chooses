@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void queenPermutations(int n, int row, int col, string asf, int count, bool* queenVisited){
+    if(row ==  n){
+        if(count == n){
+        cout << asf << endl;
+     }
+     return;
+    }
+    
+    int nr = 0;
+    int nc = 0;
+    char sepr = '\0';
+    
+    if(col == n-1){
+        nr = row+1;
+        nc = 0;
+        sepr = '\n';
+    }
+    else{
+        nr = row;
+        nc = col+1;
+        sepr = '\t';
+    }
+    
+    for(int i = 0; i < n; i++){
+        if(queenVisited[i] == false){
+            queenVisited[i] = true;
+            queenPermutations(n, nr, nc, asf+"q"+to_string(i+1)+sepr, count+1, queenVisited);
+            queenVisited[i] = false;
+        }
+    }
+     queenPermutations(n, nr, nc, asf+"-"+sepr, count, queenVisited);
+    
+}
+
+int main(){
+    int n;
+    cin >> n;
+    bool* queenVisited = new bool[n];
+    for(int i = 0; i < n; i++){
+        queenVisited[i] = false;
+    }
+    queenPermutations(n, 0, 0,"", 0, queenVisited);
+    return 0;
+}
