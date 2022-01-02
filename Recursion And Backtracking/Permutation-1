@@ -1,1 +1,36 @@
+Time Complexity: O(mn)
+Space Complexity: O(m)
+#include<iostream>
+using namespace std;
 
+void permutationOne(int* nBoxesArray, int nBoxes, int rItems, int currItem){
+    //Base Case
+    if(currItem > rItems){
+        for(int i = 0; i < nBoxes; i++){
+            cout << nBoxesArray[i];
+        }
+        cout << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = 0; i < nBoxes; i++){
+        if(nBoxesArray[i] == 0){
+            nBoxesArray[i] = currItem;
+            permutationOne(nBoxesArray, nBoxes, rItems, currItem+1);
+            nBoxesArray[i] = 0;
+        }
+    }
+}
+
+int main(){
+    int nBoxes, rItems;
+    cin >> nBoxes >> rItems;
+    
+    int* nBoxesArray = new int[nBoxes];
+    for(int i = 0; i < nBoxes; i++){
+        nBoxesArray[i] = 0;
+    }
+    permutationOne(nBoxesArray, nBoxes, rItems, 1);
+    return 0;
+}
