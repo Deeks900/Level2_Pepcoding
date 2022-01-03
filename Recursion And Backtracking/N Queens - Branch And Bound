@@ -55,3 +55,54 @@ int main(){
     nQueenBranch(n, board, cols, diag1, diag2, 0);
     return 0;
 }
+
+
+//Second Way --- Without using a 2-D matrix
+#include<bits/stdc++.h>
+using namespace std;
+
+void nQueenBranch(int n, string asf, bool* cols, bool* diag1, bool* diag2, int row){
+    if(row == n){
+        cout << asf << "." << endl;
+        return;
+    }
+    //Recursive Calls
+    for(int i = 0; i < n; i++){
+        if(cols[i] == false && diag1[i+row] == false && diag2[row-i+n-1] == false){
+            cols[i] = true;
+            diag1[i+row] = true;
+            diag2[row-i+n-1] = true;
+            nQueenBranch(n, asf+to_string(row)+"-"+to_string(i)+", ", cols, diag1, diag2, row+1);
+            cols[i] = false;
+            diag1[i+row] = false;
+            diag2[row-i+n-1] = false;
+        }
+    }
+}
+
+
+int main(){
+    int n;
+    cin >> n;
+    
+    bool* cols = new bool[n];
+    bool* diag1 = new bool[2*n-1];
+    bool* diag2 = new bool[2*n-1];
+    // bool** board = new bool*[n];
+    // for(int i = 0; i < n; i++){
+    //     board[i] = new bool[n];
+    //     for(int j = 0; j < n; j++){
+    //         board[i][j] = false;
+    //     }
+    // }
+    for(int i = 0; i < n; i++){
+        cols[i] = false;
+    }
+    for(int i = 0; i < 2*n-1; i++){
+        diag1[i] = false;
+        diag2[i] = false;
+    }
+    
+    nQueenBranch(n, "", cols, diag1, diag2, 0);
+    return 0;
+}
