@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void  queen2DAs1D(int n, char** chess, int lp, int qp){
+    //Base Case
+    if(qp == n){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                cout << chess[i][j] << "\t";
+            }
+            cout << endl;
+        }
+        cout << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = lp+1; i < n*n; i++){
+        int row = i/n;
+        int col = i%n;
+        chess[row][col] = 'q';
+        queen2DAs1D(n, chess, i, qp+1);
+        chess[row][col] = '-';
+    }
+}
+int main(){
+    int n;
+    cin >> n;
+    char** chess = new char*[n];
+    for(int i = 0; i < n; i++){
+        chess[i] = new char[n];
+        for(int j = 0; j < n; j++){
+            chess[i][j] = '-';
+        }
+    }
+    queen2DAs1D(n, chess, -1, 0);
+    return 0;
+}
