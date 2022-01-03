@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isQueenSafe(string** chess, int row, int col, int n){
+    //check up
+    for(int i = row-1; i >= 0; i--){
+        if(chess[i][col] != "-"){
+            return false;
+        }
+    }
+    
+    //check down
+     for(int i = row+1; i < n; i++){
+        if(chess[i][col] != "-"){
+            return false;
+        }
+    }
+    
+    //check diagonals
+    
+      for(int i = row-1,j = col+1; i >= 0 && j < n; i--, j++){
+        if(chess[i][j] != "-"){
+            return false;
+        }
+    }
+    
+    for(int i = row-1,j = col-1; i >= 0 && j >= 0; i--, j--){
+        if(chess[i][j] != "-"){
+            return false;
+        }
+    }
+    
+      for(int i = row+1,j = col+1; i < n && j < n; i++, j++){
+        if(chess[i][j] != "-"){
+            return false;
+        }
+    }
+    
+    for(int i = row+1,j = col-1; i < n && j >= 0; i++, j--){
+        if(chess[i][j] != "-"){
+            return false;
+        }
+    }
+    
+    //check horizontal
+    for(int i = col-1; i >= 0; i--){
+        if(chess[row][i] != "-"){
+            return false;
+        }
+    } 
+     for(int i = col+1; i < n; i++){
+        if(chess[row][i] != "-"){
+            return false;
+        }
+    } 
+    return true;
+}
+
+void  queen2DAs1D(int n, string** chess, int qp){
+    //Base Case
+    if(qp == n){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                cout << chess[i][j] << "\t";
+            }
+            cout << endl;
+        }
+        cout << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = 0; i < n*n; i++){
+        int row = i/n;
+        int col = i%n;
+        if(chess[row][col] == "-" && isQueenSafe(chess, row, col, n)){
+            chess[row][col] = "q"+to_string(qp+1);
+            queen2DAs1D(n, chess, qp+1);
+            chess[row][col] = "-";
+        }
+        
+    }
+}
+int main(){
+    int n;
+    cin >> n;
+    string** chess = new string*[n];
+    for(int i = 0; i < n; i++){
+        chess[i] = new string[n];
+        for(int j = 0; j < n; j++){
+            chess[i][j] = "-";
+        }
+    }
+    queen2DAs1D(n, chess, 0);
+    return 0;
+}
