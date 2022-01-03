@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void combinationQueenChooses(int n, char** chess, int llbx, int llby, int count){
+    //Base Case
+    if(count == n){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                cout << chess[i][j] << "\t";
+            }
+            cout << endl;
+        }
+        cout << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int j = llby+1; j < n; j++){
+        chess[llbx][j] = 'q';
+        combinationQueenChooses(n, chess, llbx, j, count+1);
+        chess[llbx][j] = '-';
+    }
+    
+    for(int i = llbx+1; i < n; i++){
+        for(int j = 0; j < n; j++){
+                chess[i][j] = 'q';
+                combinationQueenChooses(n, chess, i, j, count+1);
+                chess[i][j] = '-';
+        }
+    }
+}
+
+int main(){
+    int n;
+    cin >> n;
+    char** chess = new char*[n];
+    for(int i = 0; i < n; i++){
+        chess[i] = new char[n];
+        for(int j = 0; j < n; j++){
+            chess[i][j] = '-';
+        }
+    }
+    
+    combinationQueenChooses(n, chess, 0, -1, 0);
+    return 0;
+}
