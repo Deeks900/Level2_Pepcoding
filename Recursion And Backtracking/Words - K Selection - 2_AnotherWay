@@ -20,16 +20,21 @@ int main(){
     int k;
     cin >> k;
     
-    map<char, int> freq;
+    set<char> freq;
     for(auto i: input){
-        freq[i] += 1;
+        freq.insert(i);
     }
     
     string distinct = "";
-    for(auto it: freq){
-        distinct += it.first;
+    for(auto i: input){
+        if(freq.find(i) != freq.end()){
+              distinct += i;
+              freq.erase(i);
+        }
+      
     }
-    
-    // vector<char> output(k, '-');
     kSelect(distinct, k, 0, -1, "");
+    return 0;
 }
+
+
