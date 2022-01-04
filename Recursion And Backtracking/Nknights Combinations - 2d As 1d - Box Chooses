@@ -1,0 +1,76 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isKnightSafe(char** chess, int n, int row, int col){
+    //First direction
+    for(int i = row-1, j = col-2; i>=0 && j>=0; i--,j-=2){
+        if(chess[i][j] == 'k'){
+            return false;
+        }
+    }
+    
+     for(int i = row-2, j = col-1; i>=0 && j>=0; i-=2,j--){
+        if(chess[i][j] == 'k'){
+            return false;
+        }
+    }
+    
+    for(int i = row-2, j = col+1; i>=0 && j<n; i-=2,j++){
+        if(chess[i][j] == 'k'){
+            return false;
+        }
+    } 
+    
+     for(int i = row-1, j = col+2; i>=0 && j<n; i--,j+=2){
+        if(chess[i][j] == 'k'){
+            return false;
+        }
+    }
+    
+    return true;
+    
+}
+
+void nKnight(char** chess, int n, int count, string psf, int cell){
+    //Base Case
+    if(cell == n*n){
+        if(count == n){
+        cout << psf << endl;
+     }
+      return;
+    }
+    
+    //Recursive Calls
+    int row = cell/n;
+    int col = cell%n;
+    char sepr = '\0';
+    if(col == n-1){
+        sepr = '\n';
+    }
+    else{
+        sepr = '\t';
+    }
+    
+    //calls
+    if(isKnightSafe(chess, n, row, col)){
+        chess[row][col] = 'k';
+        nKnight(chess, n, count+1, psf+"k"+sepr, cell+1);
+        chess[row][col] = '-';
+    }
+    nKnight(chess, n, count, psf+"-"+sepr, cell+1);
+    
+}
+int main(){
+    int n;
+    cin >> n;
+    char** chess = new char*[n];
+    for(int i = 0; i < n; i++){
+        chess[i] = new char[n];
+        for(int j = 0; j < n; j++){
+            chess[i][j] = '-';
+        }
+    }
+    
+    nKnight(chess, n, 0, "", 0);
+    return 0;
+}
