@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void kSelect(string input, vector<char> output, int k, int count, int idx, int lpidx){
+    //Base Case
+    if(idx == input.size()){
+        if(count == k){
+            for(auto i: output){
+                cout << i;
+            }
+            cout << endl;
+        }
+        return;
+    }
+    //Recursive Calls
+    for(int i = lpidx+1; i < k; i++){
+        output[i] = input[idx];
+        kSelect(input, output, k, count+1, idx+1, i);
+        output[i] = '-';
+    }
+    kSelect(input, output, k, count, idx+1, lpidx);
+}
+
+int main(){
+    string input;
+    cin >> input;
+    
+    int k;
+    cin >> k;
+    
+    map<char, int> freq;
+    for(auto i: input){
+        freq[i] += 1;
+    }
+    
+    string distinct = "";
+    for(auto it: freq){
+        distinct += it.first;
+    }
+    
+    vector<char> output(k, '-');
+    kSelect(distinct, output, k, 0, 0, -1);
+}
+
