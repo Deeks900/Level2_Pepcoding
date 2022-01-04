@@ -1,0 +1,39 @@
+//Word Chooses
+#include <bits/stdc++.h>
+using namespace std;
+
+void permutWords2(string input, int idx, vector<char> ans, int n, unordered_map<char, int> lastOccurence){
+    
+    //Base Case
+    if(idx == n){
+        for(auto i: ans){
+            cout << i;
+        }
+        cout << endl;
+        return;
+    }
+    //Recursive Calls
+    int idxOccured = lastOccurence[input[idx]];
+    for(int i = idxOccured+1; i < n; i++){
+        if(ans[i] == '-'){
+            ans[i] = input[idx];
+            lastOccurence[input[idx]] = i;
+            permutWords2(input, idx+1, ans, n, lastOccurence);
+            lastOccurence[input[idx]] = -1;
+            ans[i] = '-';
+        }
+    }
+}
+int main(){
+    string input;
+    cin >> input;
+    
+    unordered_map<char, int> lastOccurence;
+    for(auto i: input){
+        lastOccurence[i] = -1;
+    }
+    int n = input.size();
+    vector<char> ans(n, '-');
+    permutWords2(input, 0, ans, n, lastOccurence);
+    return 0;
+}
