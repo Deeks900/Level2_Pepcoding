@@ -1,0 +1,34 @@
+//Box Chooses
+#include<bits/stdc++.h>
+using namespace std;
+
+void permutWords(string input, map<char, int> charDiff, string psf, int boxNo){
+    //Base Case
+    if(boxNo == input.size()){
+        cout << psf << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(auto i: charDiff){
+        if(i.second > 0){
+            charDiff[i.first] -= 1;
+            permutWords(input, charDiff, psf+i.first, boxNo+1);
+            charDiff[i.first] += 1;
+        }
+    }
+    
+}
+
+int main(){
+    string input;
+    cin >> input;
+    
+    map<char, int> charDiff;
+    for(auto i: input){
+        charDiff[i] += 1;
+    }
+   
+    permutWords(input, charDiff, "", 0);
+    return 0;
+}
