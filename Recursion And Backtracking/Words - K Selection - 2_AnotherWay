@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void kSelect(string input, int k, int count, int lpidx, string psf){
+    //Base Case
+    if(count == k){
+        cout << psf << endl;
+        return;
+    }
+    //Recursive Calls
+    for(int i = lpidx+1; i < input.size(); i++){
+        kSelect(input, k, count+1,i, psf+input[i]);
+    }
+}
+
+int main(){
+    string input;
+    cin >> input;
+    
+    int k;
+    cin >> k;
+    
+    map<char, int> freq;
+    for(auto i: input){
+        freq[i] += 1;
+    }
+    
+    string distinct = "";
+    for(auto it: freq){
+        distinct += it.first;
+    }
+    
+    // vector<char> output(k, '-');
+    kSelect(distinct, k, 0, -1, "");
+}
