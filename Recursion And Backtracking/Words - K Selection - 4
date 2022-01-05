@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void kSelection(string unique, unordered_map<char, int> freq, int count, string psf, int lpidx, int k){
+    //Base Case
+    if(count == k){
+        cout << psf << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = lpidx; i < unique.size(); i++){
+        if(freq[unique[i]] > 0){
+            freq[unique[i]] -= 1;
+            kSelection(unique, freq, count+1, psf+unique[i], i, k);
+            freq[unique[i]] += 1;
+        }
+    }
+}
+int main(){
+    string input;
+    cin >> input;
+    
+    int k;
+    cin >> k;
+    
+    unordered_map<char, int> freq;
+    set<char> s;
+    for(auto i: input){
+        freq[i] += 1;
+        s.insert(i);
+    }
+    
+    string unique = "";
+    for(auto i: input){
+        if(s.find(i) != s.end()){
+            unique += i;
+            s.erase(i);
+        }
+    }
+    
+    kSelection(unique, freq, 0, "", 0, k);
+    return 0;
+}
