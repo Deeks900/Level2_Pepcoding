@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void kSelect(string input, int k, int count, set<char>visited, string psf){
+    //Base Case
+    if(count == k){
+        cout << psf << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = 0; i < input.size(); i++){
+        if(visited.find(input[i]) == visited.end()){
+            visited.insert(input[i]);
+            kSelect(input, k, count+1, visited, psf+input[i]);
+            visited.erase(input[i]);
+        }
+    }
+}
+
+int main(){
+    string input;
+    cin >> input;
+    
+    int k;
+    cin >> k;
+    
+    set<char> s;
+    for(auto i: input){
+        s.insert(i);
+    }
+    
+    string distinct = "";
+    for(auto i: input){
+        if(s.find(i) != s.end()){
+            distinct += i;
+            s.erase(i);
+        }
+    }
+    
+    set<char> visited;
+    kSelect(distinct, k, 0, visited, "");
+    return 0;
+}
