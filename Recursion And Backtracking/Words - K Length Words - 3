@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void wordKLength(string input, int k, char* box, unordered_map<char, int> lastOccured, int count, int idx){
+    //Base Case
+    if(idx == input.size()){
+        if(count == k){
+            for(int i= 0; i<k; i++){
+                cout<<box[i];
+            }
+            cout<<endl;
+        }
+       return; 
+    }
+    //Recursive Calls
+    int lo = lastOccured[input[idx]];
+    for(int i = lastOccured[input[idx]]+1; i < k; i++){
+        if(box[i] == '-'){
+            box[i] = input[idx];
+            lastOccured[input[idx]] = i;
+            wordKLength(input, k, box, lastOccured, count+1, idx+1);
+            box[i] = '-';
+            lastOccured[input[idx]] = lo;
+        }
+    }
+    if(lastOccured[input[idx]] == -1){
+        wordKLength(input, k, box, lastOccured, count, idx+1);
+    }
+}
+
+int main(){
+    string input;
+    cin >> input;
+    
+    int k;
+    cin >> k;
+    
+    char* box = new char[k];
+    for(int i = 0; i < k; i++){
+        box[i] = '-';
+    }
+    
+    unordered_map<char, int> lastOccured;
+    for(auto i: input){
+        lastOccured[i] = -1;
+    }
+    
+    wordKLength(input, k, box, lastOccured, 0, 0);
+    return 0;
+}
