@@ -1,0 +1,159 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool canPlaceHorizontally(char** puzzle, int i, int j, string word){
+    if(j-1 >= 0 && puzzle[i][j-1] != '+'){
+        return false;
+    }
+    else if(j+word.size() < 10 && puzzle[i][j+word.size()] != '+'){
+        return false;
+    }
+    
+    for(int jj = 0; jj < word.size(); jj++){
+        if(j+jj >= 10){
+            return false;
+        }
+        
+        if(puzzle[i][j+jj] == '-' || puzzle[i][j+jj] == word[jj]){
+           continue;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+bool canPlaceVertically(char** puzzle, int i, int j, string word){
+    if(i-1 >= 0 && puzzle[i-1][j] != '+'){
+        return false;
+    }
+    else if(i+word.size() < 10 && puzzle[i+word.size()][j] != '+'){
+        return false;
+    }
+    
+    for(int ii = 0; ii < word.size(); ii++){
+        if(i+ii >= 10){
+            return false;
+        }
+        if(puzzle[i+ii][j] == '-' || puzzle[i+ii][j] == word[ii]){
+            continue;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+ bool* placeItHorizontally(char** puzzle, int i, int j, string word){
+        bool* placed = new bool[word.size()];
+        for(int ii = 0; ii < word.size(); ii++){
+            placed[ii] = false;
+        }
+        
+        for(int jj = 0; jj < word.size(); jj++){
+            if(puzzle[i][j+jj] == '-'){
+                placed[jj] = true;
+                puzzle[i][j+jj] = word[jj];
+            }
+        }
+        
+        return placed;
+    }
+    
+    
+     bool* placeItVertically(char** puzzle, int i, int j, string word){
+        bool* placed = new bool[word.size()];
+        for(int ii = 0; ii < word.size(); ii++){
+            placed[ii] = false;
+        }
+        
+        for(int ii = 0; ii < word.size(); ii++){
+            if(puzzle[i+ii][j] == '-'){
+                placed[ii] = true;
+                  puzzle[i+ii][j] = word[ii];
+            }
+        }
+        
+        return placed;
+    }
+    
+    void unplaceItHorizontally(char** puzzle, int i, int j, bool* placedPositions, string word){
+        for(int jj = 0; jj < word.size(); jj++){
+            if(placedPositions[jj] == true){
+                puzzle[i][j+jj] = '-';
+            }
+        }
+    }
+    
+     void unplaceItVertically(char** puzzle, int i, int j, bool* placedPositions, string word){
+        for(int ii = 0; ii < word.size(); ii++){
+            if(placedPositions[ii] == true){
+                puzzle[i+ii][j] = '-';
+            }
+        }
+    }
+    
+void crosswordPuzzle(char** puzzle, vector<string> words, int idx){
+    //Base Case
+    if(idx == words.size()){
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                cout << puzzle[i][j] << " ";
+            }
+            cout << endl;
+        }
+        return;
+    }
+
+    //Recursive Calls
+    string CurrWord = words[idx];
+    for(int i = 0; i < 10; i++){
+        for(int j = 0; j < 10; j++){
+           if(puzzle[i][j] == '-' || puzzle[i][j] == CurrWord[0]){
+               //Check for horizontal Alignment
+               if(canPlaceHorizontally(puzzle, i, j, CurrWord)){
+                   bool* placedPositions = placeItHorizontally(puzzle, i, j, CurrWord);
+                   crosswordPuzzle(puzzle, words, idx+1);
+                   unplaceItHorizontally(puzzle, i, j, placedPositions, CurrWord);
+               }
+               //Check for vertical Alignment
+               if(canPlaceVertically(puzzle, i, j, CurrWord)){
+                   bool* placedPositions = placeItVertically(puzzle, i, j, CurrWord);
+                   crosswordPuzzle(puzzle, words, idx+1);
+                   unplaceItVertically(puzzle, i, j, placedPositions, CurrWord);
+               }
+           }
+        }
+    }
+}
+
+int main(){
+    char** puzzle = new char*[10];
+    for(int i = 0; i < 10; i++){
+        puzzle[i] = new char[10];
+    }
+    
+    //Taking Input
+    for(int i = 0; i < 10; i++){
+        for(int j = 0; j < 10; j++){
+            cin >> puzzle[i][j];
+        }
+    }
+    
+    int n;
+    cin >> n;
+    
+    vector<string> words;
+    for(int i = 0; i < n; i++){
+        string temp;
+        cin >> temp;
+        words.push_back(temp);
+    }
+    
+    crosswordPuzzle(puzzle, words, 0);
+    return 0;
+}
