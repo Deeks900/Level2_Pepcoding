@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void coinChange1(int n, int* denominations, int amt, int idx, string psf){
+    //Base Case
+    if(idx == n){
+        if(amt == 0){
+            cout << psf << "."<< endl;
+        }
+        return;
+    }
+    for(int i = amt/denominations[idx]; i >= 1; i--){
+        string temp = "";
+        for(int k = 0; k < i; k++){
+            temp = temp+to_string(denominations[idx])+"-";
+        }
+        coinChange1(n, denominations, (amt-denominations[idx]*i), idx+1, psf+temp);
+    }
+    
+    coinChange1(n, denominations, amt, idx+1, psf);
+}
+
+int main(){
+    int n;
+    cin >> n;
+    int* denominations = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> denominations[i];
+    }
+    
+    int amt;
+    cin >> amt;
+    
+    coinChange1(n, denominations, amt, 0, "");
+    return 0;
+}
