@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isValid(int** matrix, int value, int cr, int cc){
+    //Check the column
+    for(int row = 0; row < 9; row++){
+        if(matrix[row][cc] == value){
+            return false;
+        }
+    }
+    
+    //Check the row
+    for(int col = 0; col < 9; col++){
+        if(matrix[cr][col] == value){
+            return false;
+        }
+    }
+    
+    //Find the starting coordinates of this submatrix
+    cr = cr/3*3;
+    cc = cc/3*3;
+    
+    //Check the submatrix
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            if(matrix[cr+i][cc+j] == value){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
+void solveSudoku(int** matrix, int cr, int cc) {
+    
+     //Base Case
+    if(cr == 9){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                cout << matrix[i][j] << " ";
+            }
+            cout << endl;
+        }
+        return;
+    }
+    
+  int nr = 0;
+  int nc = 0;
+
+  if (cc == 8) {
+    nr = cr + 1;
+    nc = 0;
+  }
+  else {
+    nr = cr;
+    nc = cc + 1;
+  }
+
+   
+    
+  //Recursive Calls
+  if(matrix[cr][cc] != 0){
+      solveSudoku(matrix, nr, nc);
+  }
+  else{
+    for (int i = 1; i < 10; i++) {
+      if(isValid(matrix, i, cr, cc)) {
+        matrix[cr][cc] = i;
+        solveSudoku(matrix, nr, nc);
+        matrix[cr][cc] = 0;
+      }
+    }
+  }
+
+}
+
+int main() {
+  int row = 9;
+  int col = 9;
+
+  int** matrix = new int*[9];
+  for (int i = 0; i < row; i++) {
+    matrix[i] = new int[9];
+  }
+
+  //Taking Input
+  for (int i = 0; i < row; i++) {
+    for (int j = 0; j < col; j++) {
+      cin >> matrix[i][j];
+    }
+  }
+
+  solveSudoku(matrix, 0, 0);
+  return 0;
+}
