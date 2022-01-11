@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int getNumber(string input, map<char, int> mapped){
+    int num = 0;
+    for(auto i: input){
+        int n = mapped[i];
+        num = num*10+n;
+    }
+    return num;
+}
+
+bool checkSum(string s1, string s2, string s3, map<char, int> mapped){
+    int num1 = getNumber(s1, mapped);
+    int num2 = getNumber(s2, mapped);
+    int num3 = getNumber(s3, mapped);
+    
+    if(num1+num2 == num3){
+        return true;
+    }
+    
+        return false;
+    
+}
+
+void cryptArithmetic(string s1, string s2, string s3, map<char, int> mapped, bool* usedDigits, string input, int idx){
+    //Base Case
+    if(idx == input.size()){
+        bool ans = checkSum(s1, s2, s3, mapped);
+        if(ans == true){
+           for(auto it: mapped){
+            cout << it.first << "-" << it.second << " ";
+            }
+            cout << endl; 
+        }
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = 0; i < 10; i++){
+        if(usedDigits[i] == false){
+            usedDigits[i] = true;
+            mapped[input[idx]] = i;
+            cryptArithmetic(s1, s2, s3, mapped, usedDigits, input, idx+1);
+            mapped[input[idx]] = -1;
+            usedDigits[i] = false;
+        }
+    }
+}
+
+int main(){
+    string s1, s2, s3;
+    cin >> s1 >> s2 >> s3;
+    
+    string unique = "";
+    map<char, int> mapped;
+    for(auto i: s1){
+        if(mapped.find(i) == mapped.end()){
+            mapped[i] = -1;
+            unique += i;
+        }
+    }
+    
+     for(auto i: s2){
+        if(mapped.find(i) == mapped.end()){
+            mapped[i] = -1;
+            unique += i;
+        }
+    }
+    
+     for(auto i: s3){
+        if(mapped.find(i) == mapped.end()){
+            mapped[i] = -1;
+            unique += i;
+        }
+    }
+    
+    bool* usedDigits = new bool[10];
+    for(int i = 0; i < 10; i++){
+        usedDigits[i] = false;
+    }
+    
+    cryptArithmetic(s1, s2, s3, mapped, usedDigits, unique, 0);
+    return 0;
+}
