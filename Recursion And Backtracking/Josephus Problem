@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int josephus(int* arr, int n, int k, int idx){
+    //Base Case
+    if(n == 1){
+        return arr[0];
+    }
+    
+    //small calculations
+    idx = ((idx+k)%n);
+    int* newArr = new int[n-1];
+    for(int i = 0, j= 0; i < n; i++){
+        if(i != idx){
+            newArr[j] = arr[i];
+            j++;
+        }
+    }
+    
+    //Recursive Call
+    int ans = josephus(newArr, n-1, k, idx);
+    return ans;
+}
+
+int main(){
+    int n, k;
+    cin >> n >> k;
+    
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++){
+        arr[i] = i;
+    }
+    
+    int ans = josephus(arr, n, k-1, 0);
+    cout << ans;
+    return 0;
+}
