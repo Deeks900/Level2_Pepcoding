@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void abbre(string input, int idx, int lso, string psf){
+    if(idx == input.size()){
+        cout << psf << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    abbre(input, idx+1, 0, psf+input[idx]);
+    if(lso == 1){
+        int num = ((psf[psf.size()-1]-'0')+1);
+        string temp = "";
+        for(int i = 0; i < psf.length()-1; i++){
+            temp += psf[i];
+        }
+        temp+= to_string(num);
+        abbre(input, idx+1, 1, temp);
+    }
+    else{
+        abbre(input, idx+1, 1, psf+"1");
+    }
+}
+
+int main(){
+    string s;
+    cin >> s;
+    
+    abbre(s, 0, 0, "");
+    return 0;
+}
