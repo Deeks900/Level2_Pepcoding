@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void abbre(string input, int idx, int count, string psf){
+    //Base Case
+    if(idx == input.size()){
+        if(count == 0){
+            cout << psf << endl;
+        }
+        else{
+            cout << psf << count << endl;
+        }
+        return;
+    }
+    
+    //Recursive Calls
+    //I want to come
+    abbre(input, idx+1, 0, count==0?psf+input[idx]:psf+to_string(count)+input[idx]);
+    //I don't want to come
+    abbre(input, idx+1, count+1, psf);
+}
+
+int main(){
+    string s;
+    cin >> s;
+    
+    abbre(s, 0, 0, "");
+    return 0;
+}
