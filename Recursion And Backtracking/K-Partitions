@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int counter = 1;
+void kPartitions(int n, int k, int i, int cnes, vector<vector<int>> output){
+    //Base Case
+    if(i > n){
+        if(cnes == k){
+            cout << counter<< "." << " ";
+            counter++;
+            for(int z = 0; z < k; z++){
+                cout << "[";
+                for(int j = 0; j < output[z].size(); j++){
+                    if(j == output[z].size()-1){
+                        cout << output[z][j];
+                    }
+                    else{
+                        cout << output[z][j] << ", ";
+                    }
+                }
+                cout << "]" << " ";
+            }
+            cout << endl;
+      }
+      return;
+    }
+    
+    
+    //Recursive Calls
+    for(int j = 0; j < k; j++){
+        if(output[j].size() != 0){
+            output[j].push_back(i);
+            kPartitions(n, k, i+1, cnes, output);
+            output[j].pop_back();
+        }
+        else{
+            output[j].push_back(i);
+            kPartitions(n, k, i+1, cnes+1, output);
+            output[j].pop_back();
+            break;
+        }
+    }
+    
+}
+
+int main(){
+    int n, k;
+    cin >> n >> k;
+    
+    vector<vector<int>> finalOutput(k, vector<int>());
+    kPartitions(n, k, 1, 0, finalOutput);
+    return 0;
+}
