@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void display(vector<vector<int>>& partitions, int k){
+    for(int i = 0; i < k; i++){
+        cout << "[";
+        for(int j = 0; j < partitions[i].size(); j++){
+            if(j == partitions[i].size()-1){
+                cout << partitions[i][j];
+            }
+            else{
+                cout << partitions[i][j] << ", ";
+            }
+        }
+        cout << "] ";
+    }
+    cout << endl;
+}
+
+void kEqualPartition(int n, int* arr, int k, vector<vector<int>> partitions, int idx, int csf){
+    //Base case
+    if(idx == n){
+        if(csf == k){
+            int finalSum = 0;
+            bool flag = false;
+            for(auto i: partitions){
+                int sum = 0;
+                for(auto j: i){
+                    sum += j;
+                }
+                if(finalSum == 0){
+                    finalSum = sum;
+                }
+                else{
+                    if(finalSum != sum){
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+           if(flag == false){
+               display(partitions, k);
+           } 
+        }
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = 0; i < k; i++){
+        if(partitions[i].size() == 0){
+            partitions[i].push_back(arr[idx]);
+            kEqualPartition(n, arr, k, partitions, idx+1, csf+1);
+            partitions[i].pop_back();
+            break;
+        }
+        else{
+            partitions[i].push_back(arr[idx]);
+            kEqualPartition(n, arr, k, partitions, idx+1, csf);
+            partitions[i].pop_back();
+        }
+    }
+}
+
+int main(){
+    int n;
+    cin >> n;
+    int* arr = new int[n];
+    
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+    
+    int k; 
+    cin >> k;
+    
+    vector<vector<int>> partitions(k, vector<int>());
+    kEqualPartition(n, arr, k, partitions, 0, 0);
+    return 0;
+}
