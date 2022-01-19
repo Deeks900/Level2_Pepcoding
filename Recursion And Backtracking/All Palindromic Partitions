@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isPalindrome(string input){
+    int i = 0;
+    int j = input.size()-1;
+    
+    while(i <= j){
+        if(input[i] != input[j]){
+            return false;
+        }
+        i++;
+        j--;
+    }
+    
+    return true;
+}
+
+void getPartition(string input, vector<string> asf){
+    //Base Case
+    if(input.size() == 0){
+        for(auto i: asf){
+            cout << "(" << i << ")" << " ";
+        }
+        cout << endl;
+        return;
+    }
+    
+    //Base Case
+    for(int i = 0; i < input.length(); i++){
+        string temp = input.substr(0, i+1);
+        if(isPalindrome(temp)){
+            asf.push_back(temp);
+            getPartition(input.substr(i+1), asf);
+            asf.pop_back();
+        }
+    }
+  
+}
+
+int main(){
+    string input;
+    cin >> input;
+    
+    vector<string> asf;
+    getPartition(input, asf);
+    return 0;
+}
+  
