@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int getMax(vector<string> words, unordered_map<char, int> freq, int* score, int idx){
+    //Base Case
+    if(idx == words.size()){
+        return 0;
+    }
+    
+    //Recursive Calls
+    int ans1 = getMax(words, freq, score, idx+1);
+    bool flag = true;
+    unordered_map<char, int> freqTemp = freq;
+    for(auto i: words[idx]){
+        if(freqTemp[i] > 0){
+            freqTemp[i] -= 1;
+        }
+        else{
+            flag = false;
+            break;
+        }
+    }
+    
+    int ans2 = 0;
+    if(flag == true){
+        int tempSum = 0;
+        for(auto i: words[idx]){
+            tempSum += score[i-'a'];
+        }
+        ans2 = (getMax(words, freqTemp, score, idx+1)+tempSum);
+        
+    }
+    int finalAns = max(ans1, ans2);
+    return finalAns;
+    
+}
+
+int main(){
+    int n;
+    cin >> n;
+    vector<string> words;
+    for(int i = 0; i < n; i++){
+        string s;
+        cin >> s;
+        words.push_back(s);
+    }
+    int m;
+    cin >> m;
+    
+    vector<char> alpha;
+    for(int i = 0; i < m; i++){
+        char temp;
+        cin >> temp;
+        alpha.push_back(temp);
+    }
+    
+    int score[26];
+    for(int i = 0; i < 26; i++){
+        cin >> score[i];
+    }
+    
+    unordered_map<char, int> freq;
+    for(auto i: alpha){
+        freq[i] += 1;
+    }
+    
+    int ans = getMax(words, freq, score, 0);
+    cout << ans;
+    return 0;
+}
