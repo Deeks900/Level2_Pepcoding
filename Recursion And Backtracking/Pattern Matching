@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void mapTheCharacter(string input, string pattern, unordered_map<char, string> pMap, int idx){
+    //Base Case
+    if(input.size() == 0 && idx == pattern.size()){
+        unordered_set<char> unique;
+        for(auto i: pattern){
+            if(unique.find(i) == unique.end()){
+                cout << i << " -> " << pMap[i] << ", ";
+                unique.insert(i);
+            }
+        }
+        cout << "." << endl;
+        return;
+    }
+    
+    //Recursive Calls
+    for(int i = 0; i < input.size(); i++){
+        string temp = input.substr(0, i+1);
+        if(pMap.find(pattern[idx]) == pMap.end()){
+            pMap[pattern[idx]] = temp;
+            mapTheCharacter(input.substr(i+1), pattern, pMap, idx+1);
+            pMap.erase(pattern[idx]);
+        }
+        else{
+            string s = pMap[pattern[idx]];
+            if(s == temp){
+               mapTheCharacter(input.substr(i+1), pattern, pMap, idx+1); 
+            }
+        }
+    }
+}
+
+int main(){
+    string input;
+    cin >> input;
+    
+    string pattern;
+    cin >> pattern;
+    
+    unordered_map<char, string> pMap;
+    mapTheCharacter(input, pattern, pMap, 0);
+    return 0;
+}
