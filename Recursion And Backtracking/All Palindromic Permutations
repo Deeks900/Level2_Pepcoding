@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void getPalindromic(string temp, char oddOne, map<char, int> freq, int idx, string psf){
+    //Base Case
+    if(idx == temp.size()){
+        cout << psf;
+        if(oddOne != '-'){
+            cout << oddOne;
+        }
+        reverse(psf.begin(), psf.end());
+        cout << psf;
+        cout << endl;
+        return;
+    }
+    
+    //Recurive Calls
+    for(auto i: freq){
+        if(freq[i.first] > 0){
+            freq[i.first] -= 1;
+            getPalindromic(temp, oddOne, freq, idx+1, psf+i.first);
+            freq[i.first] += 1;
+        }
+    }
+}
+int main(){
+    string input;
+    cin >> input;
+    
+    map<char, int> freq;
+    for(auto i: input){
+        freq[i] += 1;
+    }
+    
+    string temp = "";
+    set<char> s;
+    char oddOne = '-';
+    int count = 0;
+    for(auto i: input){
+        if(s.find(i) == s.end()){
+            if(freq[i]%2 != 0){
+                count++;
+                oddOne = i;
+                if(freq[i] != 1){
+                    int times = freq[i]/2;
+                    while(times > 0){
+                        temp = temp+i;
+                        times--;
+                    }
+                }
+            }
+            else{
+                int times = freq[i]/2;
+                    while(times > 0){
+                        temp = temp+i;
+                        times--;
+                    }
+            }
+            s.insert(i);
+        }
+    }
+    if(count > 1){
+       cout << -1; 
+    }
+    else{
+       freq.clear();
+    for(auto i: temp){
+        freq[i] += 1;
+    }
+   getPalindromic(temp, oddOne, freq, 0, "");
+     
+    }
+    
+    return 0;
+}
