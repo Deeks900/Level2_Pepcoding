@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isValid(string input){
+    stack<char> s;
+     for(auto i: input){
+        if(i == '('){
+            s.push(i);
+        }
+        else{
+            if(s.size() == 0){
+                s.push(i);
+            }
+            else if(s.top() == '('){
+                s.pop();
+            }
+            else{
+               s.push(i); 
+            }
+        }
+    }
+    if(s.size() == 0){
+        return true;
+    }
+    else{
+        return false;
+    }
+    
+}
+void removePara(string input, int minRem, set<string>& output){
+    //Base Case
+    if(minRem == 0){
+        if(isValid(input))
+        output.insert(input);
+        return;
+    }
+    //Recursive Calls
+    for(int i = 0; i < input.size(); i++){
+        removePara(input.substr(0, i)+input.substr(i+1), minRem-1, output);
+    }
+}
+int getMinRemoval(string input){
+    stack<char> s;
+    for(auto i: input){
+        if(i == '('){
+            s.push(i);
+        }
+        else{
+            if(s.size() == 0){
+                s.push(i);
+            }
+            else if(s.top() == '('){
+                s.pop();
+            }
+            else{
+               s.push(i); 
+            }
+        }
+    }
+    
+    return s.size();
+}
+
+int main(){
+    string input;
+    cin >> input;
+  
+    int ans = getMinRemoval(input);
+    set<string> output;
+    removePara(input, ans, output);
+    for(auto i: output){
+        cout << i << endl;
+    }
+    return 0;
+}
