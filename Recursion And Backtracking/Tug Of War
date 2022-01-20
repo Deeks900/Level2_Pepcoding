@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void partition(int n, int size1, int size2, int* arr, int& diff, vector<int> output1, vector<int> output2, vector<int>& fOutput1, vector<int>& fOutput2, int idx, int sum1, int sum2){
+    //Base Case
+    if(idx == n){
+        if(abs(sum1-sum2) < diff){
+            diff = abs(sum1-sum2);
+            fOutput1.clear();
+            fOutput2.clear();
+            for(auto i: output1){
+                fOutput1.push_back(i);
+            }
+            for(auto i: output2){
+                fOutput2.push_back(i);
+            }
+        }
+        return;
+    }
+    
+    //Recursive Calls
+    if(output1.size() < size1){
+        output1.push_back(arr[idx]);
+        sum1 += arr[idx];
+        partition(n, size1, size2, arr, diff, output1, output2, fOutput1, fOutput2, idx+1, sum1, sum2);
+         output1.pop_back();
+         sum1 -= arr[idx];
+    }
+    if(output2.size() < size2){
+        output2.push_back(arr[idx]);
+        sum2 += arr[idx];
+        partition(n, size1, size2, arr, diff, output1, output2, fOutput1, fOutput2, idx+1, sum1, sum2);
+         output2.pop_back();
+         sum2 -= arr[idx];
+    }
+}
+int main(){
+    int n;
+    cin >> n;
+    
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+
+    int size2 = n/2;
+    int size1 = n-size2;
+    int diff = INT_MAX;
+    
+    vector<int> output1;
+    vector<int> output2;
+    vector<int> fOutput1;
+    vector<int> fOutput2;
+    int sum1 = 0;
+    int sum2 = 0;
+    partition(n, size1, size2, arr, diff, output1, output2, fOutput1, fOutput2, 0, 0, 0);
+    
+    // cout << fOutput1.size() << " " << fOutput2.size();
+    //Printing the output
+    cout << "[";
+    for(int i = 0; i < fOutput1.size(); i++){
+        if(i == fOutput1.size()-1){
+            cout << fOutput1[i];
+        }
+        else{
+            cout << fOutput1[i] << ", ";
+        }
+    }
+    cout << "] ";
+    
+    cout << "[";
+    for(int i = 0; i < fOutput2.size(); i++){
+        if(i == fOutput2.size()-1){
+            cout << fOutput2[i];
+        }
+        else{
+            cout << fOutput2[i] << ", ";
+        }
+    }
+    cout << "] ";
+    
+    return 0;
+}
