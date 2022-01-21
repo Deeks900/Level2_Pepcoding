@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int maxN = INT_MIN;
+void swapN(string input, int k){
+    int currN = stoi(input);
+    maxN = max(maxN, currN);
+    //Base Case
+    if(k == 0){
+        return;
+    }
+    //Recursive Calls
+    for(int i = 0; i < input.size()-1; i++){
+        for(int j = i+1; j < input.size(); j++){
+            int left = input[i]-'0';
+            int right = input[j]-'0';
+            if(right > left){
+                swap(input[i], input[j]);
+                swapN(input, k-1);
+                swap(input[i], input[j]);
+            }
+        }
+    }
+}
+int main(){
+    string input;
+    cin >> input;
+    
+    int k; 
+    cin >> k;
+    
+    swapN(input, k);
+    cout << maxN;
+    return 0;
+}
