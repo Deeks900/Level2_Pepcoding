@@ -1,0 +1,206 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int countInColumn(char** ans, char sign, int m, int n, int col){
+    int count = 0;
+    for(int i = 0; i < m; i++){
+        if(ans[i][col] == sign){
+            count++;
+        }
+    }
+    return count;
+}
+
+int countInRow(char** ans, char sign, int m, int n, int row){
+    int count = 0;
+    for(int i = 0; i < n; i++){
+        if(ans[row][i] == sign){
+            count++;
+        }
+    }
+    return count;
+}
+
+bool isSafe(char** ans, char sign, int* top, int* left, int* bottom, int* right, int row, int col, int m, int n){
+    //check form left
+    if((ans[row][col] != 'X') || ((col-1 >= 0) && ans[row][col-1] == sign) || ((col+1 < n) && ans[row][col+1] == sign) || ((row-1 >= 0) && ans[row-1][col] == sign)){
+        return false;
+    }
+    
+    int count1 = countInColumn(ans, sign, m, n, col);
+    int count2 = countInRow(ans, sign, m, n, row);
+    
+    if(sign == '+'){
+        if(top[col] != -1 && count1 >= top[col])
+            return false;
+         
+        if(left[row] != -1 && count2 >= left[row])
+            return false;
+    }
+    else{
+        if(bottom[col] != -1 && count1 >= bottom[col])
+            return false;
+         
+        if(right[row] != -1 && count2 >= right[row])
+            return false;
+    }
+    
+    return true;
+    
+}
+
+bool isValid(char** ans, int* top, int* left, int* right, int* bottom, int m, int n){
+    //Check '+' and '-' in all columns
+    for(int i = 0; i < n; i++){
+        int countPlus = countInColumn(ans, '+', m, n, i);
+        int countMinus = countInColumn(ans, '-', m, n, i);
+        if(top[i] != -1 && countPlus != top[i]){
+            return false;
+        }
+        if(bottom[i] != -1 && countMinus != bottom[i]){
+            return false;
+        }
+    }
+    
+    //Check '+' and '-' in all rows
+    for(int i = 0; i < m; i++){
+        int countPlus = countInRow(ans, '+', m, n, i);
+        int countMinus = countInRow(ans, '-', m, n, i);
+        if(left[i] != -1 && countPlus != left[i]){
+            return false;
+        }
+        if(right[i] != -1 && countMinus != right[i]){
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+bool magnets(int m, int n, char** arr, char** ans, int* top, int* left, int* right, int* bottom, int row, int col){
+    if(col >= n){
+        row = row+1;
+        col = 0;
+    }
+    
+    //Base Case
+    if(row >= m){
+        // To check if exact number of '+' and '-' are placed
+        if(isValid(ans, top, left, right, bottom, m, n))
+        return true;
+        else
+        return false;
+    }
+    
+    //Recursive Calls
+    //We will place magnet only if 'L' or 'T' is found
+    if(arr[row][col] == 'L'){
+        //Placing '+' then '-'
+        if(isSafe(ans, '+', top, left, bottom, right, row, col, m, n) && isSafe(ans, '-', top, left, bottom, right, row, col+1, m, n)){
+            ans[row][col] = '+';
+            ans[row][col+1] = '-';
+            bool tempAns = magnets(m, n, arr, ans, top, left, right, bottom, row, col+2);
+            if(tempAns)
+                return true;
+            ans[row][col] = 'X';
+            ans[row][col+1] = 'X';
+        }
+        //Placing '-' then '+'
+         if(isSafe(ans, '-', top, left, bottom, right, row, col, m, n) && isSafe(ans, '+', top, left, bottom, right, row, col+1, m, n)){
+            ans[row][col] = '-';
+            ans[row][col+1] = '+';
+            bool tempAns = magnets(m, n, arr, ans, top, left, right, bottom, row, col+2);
+            if(tempAns)
+                return true;
+            ans[row][col] = 'X';
+            ans[row][col+1] = 'X';
+        }
+    }
+    else if(arr[row][col] == 'T'){
+         //Placing '+' then '-'
+        if(isSafe(ans, '+', top, left, bottom, right, row, col, m, n) && isSafe(ans, '-', top, left, bottom, right, row+1, col, m, n)){
+            ans[row][col] = '+';
+            ans[row+1][col] = '-';
+            bool tempAns = magnets(m, n, arr, ans, top, left, right, bottom, row, col+1);
+            if(tempAns)
+                return true;
+            ans[row][col] = 'X';
+            ans[row+1][col] = 'X';
+        }
+        //Placing '-' then '+'
+        if(isSafe(ans, '-', top, left, bottom, right, row, col, m, n) && isSafe(ans, '+', top, left, bottom, right, row+1, col, m, n)){
+            ans[row][col] = '-';
+            ans[row+1][col] = '+';
+            bool tempAns = magnets(m, n, arr, ans, top, left, right, bottom, row, col+1);
+            if(tempAns)
+                return true;
+            ans[row][col] = 'X';
+            ans[row+1][col] = 'X';
+        }
+    }
+    
+    //I don't want to place magnet or it is 'B' or 'R'
+    bool tempAns = magnets(m, n, arr, ans, top, left, right, bottom, row, col+1);
+    if(tempAns){
+        return tempAns;
+    }
+    return false;
+}
+
+int main(){
+    int m;
+    cin >> m;
+    int n;
+    cin >> n;
+    
+    char** arr = new char*[m];
+    for(int i = 0; i < m; i++){
+        arr[i] = new char[n];
+    }
+    
+    for(int i = 0; i < m; i++){
+        for(int j = 0; j < n; j++){
+            cin >> arr[i][j];
+        }
+    }
+    
+    int* top = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> top[i];
+    }
+    
+    int* left = new int[m];
+    for(int i = 0; i < m; i++){
+        cin >> left[i];
+    }
+    int* right = new int[m];
+    for(int i = 0; i < m; i++){
+        cin >> right[i];
+    }
+    int* bottom = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> bottom[i];
+    }
+    
+    char** ans = new char*[m];
+    for(int i = 0; i < m; i++){
+        ans[i] = new char[n];
+        for(int j = 0; j < n; j++){
+            ans[i][j] = 'X';
+        }
+    }
+    
+    bool ansFinal = magnets(m, n, arr, ans, top, left, right, bottom, 0, 0);
+    if(ansFinal == true){
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                cout << ans[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+    else{
+        cout << "No Solution";
+    }
+    return 0;
+}
