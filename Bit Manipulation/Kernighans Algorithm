@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void setBits(int n){
+    int mask = (n&-n);
+    int count = 0;
+    while(mask != 0){
+        n -= mask;
+        mask = (n&-n);
+        count++;
+    }
+    
+    cout << count << endl;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    setBits(n);
+    return 0;
+}
