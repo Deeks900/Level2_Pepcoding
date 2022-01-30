@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int getRemainder(int n){
+    int countTwo = 0;
+    int i = 1;
+    while(i*2 <= n){
+        i *= 2;
+        countTwo++;
+    }
+    
+    int finalAns = n-pow(2, countTwo);
+    return finalAns;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    int l = getRemainder(n);
+    int ans = 2*l+1;
+    cout << ans;
+    return 0;
+}
