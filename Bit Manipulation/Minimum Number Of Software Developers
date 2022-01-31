@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> finalAns;
+
+void getTheAns(int* person, int idx, int m, int n, int mask, vector<int>& ans){
+    //Base Case
+    if(idx == m){
+        if(mask == ((1 << n)-1)){
+            if(finalAns.size() == 0 || ans.size() < finalAns.size()){
+                finalAns = ans;
+            }
+        }
+        return;
+    }
+    
+    //Recursive Calls
+    //That person is not going to be in my set
+    getTheAns(person, idx+1, m, n, mask, ans);
+    
+    //That person is going to be included in my set
+    ans.push_back(idx);
+    getTheAns(person, idx+1, m, n, mask|person[idx], ans);
+    ans.pop_back();
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    vector<string> skills;
+    for(int i = 0; i < n; i++){
+        string temp;
+        cin >> temp;
+        skills.push_back(temp);
+    }
+    
+    //Make a Hashmap
+    unordered_map<string, int> skillMap;
+    int count = 0;
+    for(auto i: skills){
+        skillMap[i] = count;
+        count++;
+    }
+    
+    int m;
+    cin >> m;
+    
+    int* person = new int[m];
+    for(int i = 0; i < m; i++){
+        person[i] = 0;
+    }
+    
+    for(int i = 0; i < m; i++){
+        int skillPerPerson;
+        cin >> skillPerPerson;
+        for(int j = 0; j < skillPerPerson; j++){
+            string tempSkill;
+            cin >> tempSkill;
+            int num = skillMap[tempSkill];
+            person[i] = person[i]|(1 << num);
+            
+        }
+    }
+ 
+    vector<int> ans;
+    getTheAns(person, 0, m, n, 0, ans);
+    cout << "[";
+    for(int i = 0; i < finalAns.size(); i++){
+        if(i == finalAns.size()-1){
+            cout << finalAns[i];
+        }
+        else{
+            cout << finalAns[i] << ", ";
+        }
+    }
+    cout << "]";
+    return 0;
+}
