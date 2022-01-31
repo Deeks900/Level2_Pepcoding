@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+ #include<vector>
+ using namespace std;
+ 
+ vector<int> grayCode(int n) {
+     vector<int> finalOutput;
+     if(n == 0){
+         finalOutput.push_back(0);
+          return finalOutput;
+     }
+     if(n == 1){
+        finalOutput.push_back(0);
+        finalOutput.push_back(1);
+        return finalOutput;
+     }
+ 	 
+ 	 vector<int> smallOutput = grayCode(n-1);
+ 	 
+ 	 for(int i = 0; i < smallOutput.size(); i++){
+ 	     finalOutput.push_back(smallOutput[i]);
+ 	 }
+ 	  for(int i = smallOutput.size()-1; i >= 0; i--){
+ 	      
+ 	     finalOutput.push_back(smallOutput[i] | 1 << (n-1));
+ 	 }
+ 	 sort(finalOutput.begin(), finalOutput.end());
+ 	 return finalOutput;
+ }
+     
+ 
+ int main(int argc, char** argv){
+     int n;
+     cin>>n;
+     vector<int> res = grayCode(n);
+     cout<<"[";
+     for(int i=0; i<res.size(); i++){
+         cout<<res[i];
+         if(i != res.size() - 1){
+             cout<<", ";
+         }
+     }
+     cout<<"]";
+ }
