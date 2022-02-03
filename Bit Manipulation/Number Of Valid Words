@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void getAns(int n, int m, vector<string> words, vector<string> puzzle){
+    //Making a hashmap where we store words bitmask containing that particular alphabet
+    unordered_map<char, vector<int>> wordsMap;
+    for(int i = 0; i < 26; i++){
+        wordsMap['a'+i] = vector<int>();
+    }
+    
+    //Making a map to store the result
+    unordered_map<string, int> result;
+    for(auto p: puzzle){
+       result[p] = 0; 
+    }
+    
+    for(auto word: words){
+        //creating mask of that particular word
+        int mask = 0;
+        for(auto ch: word){
+            int num = ch-'a';
+            mask = mask|(1 << num);
+        }
+        
+        //storing that word in all places in hashmap which contains that character
+        for(auto ch: word){
+            //We don't want to put same words again in hashmap
+            if(find(wordsMap[ch].begin(), wordsMap[ch].end(), mask) == wordsMap[ch].end()){
+              wordsMap[ch].push_back(mask);   
+            }
+           
+        }
+    }
+    
+    //iterating puzzle elements
+    for(auto puzzleWord: puzzle){
+        //creating bitmask of puzzleWord
+        int mask = 0;
+        for(auto c: puzzleWord){
+            int num = c-'a';
+            mask = mask|(1 << num);
+        }
+        
+        //check the first character of puzzleWord
+        char startingElement = puzzleWord[0];
+        vector<int> validWords = wordsMap[startingElement];
+        //iterating all bitmasks
+        for(auto w: validWords){
+           int res = w & mask;
+           if(res == w){
+               result[puzzleWord] += 1;
+           }
+        }
+    }
+    
+    //Printing the result
+    for(auto i: puzzle){
+        cout << i << " -> " << result[i] << endl;
+    }
+    // for(auto i: result){
+    //     cout << i.first << " -> " << i.second << endl;
+    // }
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    vector<string> words;
+    for(int i = 0; i < n; i++){
+        string temp;
+        cin >> temp;
+        words.push_back(temp);
+    }
+    
+    int m;
+    cin >> m;
+    vector<string> puzzle;
+    for(int i = 0; i < m; i++){
+        string temp;
+        cin >> temp;
+        puzzle.push_back(temp);
+    }
+    
+    getAns(n, m, words, puzzle);
+    return 0;
+}
