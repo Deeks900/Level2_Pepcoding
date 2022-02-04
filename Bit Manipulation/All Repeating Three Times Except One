@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void repeatThree(int* arr, int n){
+    int threeN = INT_MAX;
+    int threeNPlusOne = 0;
+    int threeNPlusTwo = 0;
+    
+    for(int i = 0; i < n; i++){
+        int currN = arr[i];
+        int mask1 = currN&threeN;
+        int mask2 = currN&threeNPlusOne;
+        int mask3 = currN&threeNPlusTwo;
+        
+        //working on threeN
+        threeN = threeN|mask3;
+        threeN = threeN&(~mask1);
+        
+        //working on threeNPlusOne
+        threeNPlusOne = threeNPlusOne|mask1;
+        threeNPlusOne = threeNPlusOne&(~mask2);
+        
+        //working on threeNPlusTwo
+        threeNPlusTwo = threeNPlusTwo|mask2;
+        threeNPlusTwo = threeNPlusTwo&(~mask3);
+    }
+    
+    cout << threeNPlusOne;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+    
+    repeatThree(arr, n);
+    return 0;
+}
