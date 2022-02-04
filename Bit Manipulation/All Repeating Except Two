@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void exceptTwo(int* arr, int n){
+    //Find XOR of all numbers
+    int res = 0;
+    for(int i = 0; i < n; i++){
+        res = res^arr[i];
+    }
+     
+    //Find the right most set bit  mask of res
+    int rmsb = res & -res;
+    
+    //Seperate numbers on basis of rmsb;
+    int num1 = 0;
+    int num2 = 0;
+    
+    for(int i = 0; i < n; i++){
+        if((rmsb & arr[i]) == 0){
+            num1 = num1^arr[i];
+        }
+        else{
+            num2 = num2^arr[i];
+        }
+    }
+    
+    num1 < num2 ? cout << num1 << endl << num2 : cout << num2 << endl << num1;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+    
+    exceptTwo(arr, n);
+    return 0;
+}
