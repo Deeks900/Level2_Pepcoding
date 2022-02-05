@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int countTriplets(vector<int>& arr) {
+        int count = 0;
+        for(auto i: arr){
+            int val = i;
+            for(int k = i+1; k < arr.size(); k++){
+                val ^= arr[k];
+                if(val == 0){
+                    count += (k-i);
+                }
+            }
+        }
+        
+        return count;
+    }
+};
