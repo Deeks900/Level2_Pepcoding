@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void solution(vector<vector<bool>>& board, int row, int cols, int ndiag, int rdiag, string asf) {
+    //Base Case
+    if(row == board.size()){
+      cout << asf << "." << endl;
+      return;
+    }
+
+    //Recursive Calls
+    for(int col = 0; col < board[0].size(); col++){
+      if(
+        (cols&(1<<col)) == 0 &&
+        (ndiag&(1<<(col-row+board.size()-1))) == 0 &&
+        (rdiag&(1<<(row+col))) == 0
+      ){
+        cols = (cols|(1<<col));
+        ndiag = (ndiag|(1<<(col-row+board.size()-1)));
+        rdiag = (rdiag|(1<<(row+col)));
+        solution(board, row+1, cols, ndiag, rdiag, asf+to_string(row)+"-"+to_string(col)+", ");
+        cols = (cols&(~(1<<col)));
+        ndiag = (ndiag&(~(1<<(col-row+board.size()-1))));
+        rdiag = (rdiag&(~(1<<(row+col))));
+      }
+    }
+  }
+
+  int main() {
+    int n;
+    cin>>n;
+    vector<vector<bool>> board(n,vector<bool>(n, false));
+    int cols = 0;
+    int ndiag = 0;
+    int rdiag = 0;
+    solution(board, 0, cols, ndiag, rdiag, "");
+    return 0;
+  }
