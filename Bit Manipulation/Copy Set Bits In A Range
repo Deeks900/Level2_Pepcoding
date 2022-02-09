@@ -1,0 +1,15 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+  int a, b, left, right;
+  cin>>a>>b>>left>>right;
+  
+  int onesRequired = (right-left+1);
+  int temp1 = ((1<<onesRequired)-1);
+  int temp2 = (temp1 << (left-1));
+
+  int setBitsA = (a&temp2);
+  b = (b|setBitsA);
+  cout << b;
+  return 0;
+}
