@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isPowerOfFour(int n){
+    if(n == 0){
+        return false;
+    }
+
+  
+   int fact = 0b10101010101010101010101010101010;
+   
+   //check if n is a power of 2
+   if((n&(n-1)) != 0){
+       return false;
+   }
+
+   if((fact&n) != 0){
+       return false;
+   }
+   return true;
+}
+
+int main(){
+    int n;
+    cin>>n;
+    if(isPowerOfFour(n))
+    cout<<"true";
+    else cout<<"false";
+    
+}
