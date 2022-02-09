@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int main(){
+    int n;
+    cin>>n;
+    
+    //make 0th bit off
+    int temp1 = (~1);
+    n = (n&temp1);
+
+    //make first set bit off
+    int mask = (n&(-n));
+    n = (n-mask);
+
+    if(n == 0){
+        cout << "true";
+    }
+    else{
+        cout << "false";
+    }
+
+    return 0;
+
+}
