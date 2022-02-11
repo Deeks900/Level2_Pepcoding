@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int solution(int n){
+  int count = 0;
+  for(int i = 0; i < 32; i++){
+    int mask = (1<<i);
+    for(int j = 1; j <= n; j++){
+      if((j&mask) != 0){
+        count++;
+      }
+    }
+  }
+  return count;
+}
+
+int main(){
+  int n;
+  cin>>n;
+  cout<<solution(n);
+  return 0;
+}
