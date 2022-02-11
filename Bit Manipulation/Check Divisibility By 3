@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    string str;
+    cin>>str;
+    
+    int evenNo = 0;
+    int oddNo = 0;
+    for(int i = 0; i < str.size(); i++){
+        //check odd position or even position
+        if((i+1)%2 == 0){
+            evenNo = (evenNo+(str[i]-'0'));
+        }
+        else{
+            oddNo = (oddNo+(str[i]-'0'));
+        }
+    }
+
+    int delta = evenNo>oddNo ? evenNo-oddNo : oddNo-evenNo;
+    if(delta%11 == 0){
+        cout << "true";
+    }
+    else{
+        cout << "false";
+    }
+
+    return 0;
+}
