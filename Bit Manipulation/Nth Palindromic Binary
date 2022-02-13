@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int getRev(int n){
+    int ans = 0;
+    while(n != 0){
+        int mask = (1);
+        ans |= (n&mask);
+        ans = (ans<<1);
+        n = (n>>1);
+    }
+    ans = (ans>>1);
+    return ans;
+}
+
+int NthPalindromicBinary(int n)
+{
+    int len = 1;
+    int count = 1;
+
+    while(count < n){
+        len++;
+        int shiftReq = (len-1)/2;
+        count = count+(1 << shiftReq);
+    } 
+
+    count = count-(1 << ((len-1)/2));
+    int offset = (n-count-1);
+
+    //Making the answer
+    int ans = (1<<(len-1));
+    ans |= (offset<<(len/2));
+    int valRev = ans>>(len/2);
+    int rev = getRev(valRev);
+    ans |= rev;
+    return ans;  
+}
+
+int main()
+{
+    int n;cin>>n;
+    int ans=NthPalindromicBinary(n);
+    cout<<ans<<"\n";
+    return 0;
+}
