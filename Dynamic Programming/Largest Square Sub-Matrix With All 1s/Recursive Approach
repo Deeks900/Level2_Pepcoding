@@ -1,0 +1,50 @@
+//Recursive Solution
+#include<bits/stdc++.h>
+using namespace std;
+
+int largestSquareMatrix(int** matrix, int n, int m, int row, int col){
+    //Base Case
+    if(row >= n || col >= m || matrix[row][col] == 0){
+        return 0;
+    }
+  
+    //Recursive Calls
+    int ans1 = largestSquareMatrix(matrix, n, m, row, col+1);
+    int ans2 = largestSquareMatrix(matrix, n, m, row+1, col);
+    int ans3 = largestSquareMatrix(matrix, n, m, row+1, col+1);
+
+    int finalAns = min(ans1, min(ans2, ans3));
+    return (finalAns+1);
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+
+    int** matrix = new int*[n];
+    for(int i = 0; i < n; i++){
+        matrix[i] = new int[m];
+    }
+
+    //Taking input of the matrix
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            cin >> matrix[i][j];
+        }
+    }
+
+    //Calling the function
+    int finalAns = INT_MIN;
+    int ans = 0;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(matrix[i][j] != 0){
+               ans = largestSquareMatrix(matrix, n, m, i, j); 
+            }
+            finalAns = max(finalAns, ans);
+        }
+    }
+    
+    cout << finalAns << endl;
+    return 0;
+}
