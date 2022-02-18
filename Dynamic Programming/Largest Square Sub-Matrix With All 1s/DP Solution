@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int largestSquareMatrix(int** matrix, int n, int m){
+    //Matrix for DP
+     int** dp = new int*[n];
+     for(int i = 0; i < n; i++){
+         dp[i] = new int[m];
+     }
+     
+     int maxAns = INT_MIN;
+    //Traversing the DP matrix
+    for(int i = n-1; i >= 0; i--){
+        for(int j = m-1; j >= 0; j--){
+
+            //If 0 is present at this palce
+            if(matrix[i][j] == 0){
+                dp[i][j] = 0;
+                 maxAns = max(maxAns, dp[i][j]);
+            }
+            //If we are at the last row
+            else if(i == (n-1)){
+                dp[i][j] = 1;
+                maxAns = max(maxAns, dp[i][j]);
+            }
+            //If we are at the last Column
+            else if(j == (m-1)){
+                dp[i][j] = 1;
+                maxAns = max(maxAns, dp[i][j]);
+            }
+            else{
+                dp[i][j] = (min(dp[i][j+1], min(dp[i+1][j], dp[i+1][j+1]))+1);
+                maxAns = max(maxAns, dp[i][j]);
+            }
+        }
+    }
+   return maxAns; 
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+
+    int** matrix = new int*[n];
+    for(int i = 0; i < n; i++){
+        matrix[i] = new int[m];
+    }
+
+    //Taking input of the matrix
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            cin >> matrix[i][j];
+        }
+    }
+   
+    int ans = largestSquareMatrix(matrix, n, m); 
+    cout << ans << endl;
+    return 0;
+}
