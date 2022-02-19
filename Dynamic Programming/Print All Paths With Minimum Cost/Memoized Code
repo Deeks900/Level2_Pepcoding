@@ -1,0 +1,86 @@
+//Memoized Solution
+#include<bits/stdc++.h>
+using namespace std;
+
+int finalAns = INT_MAX;
+vector<string> finalOutput;
+
+void printPaths(int** matrix, int n, int m, int row, int col, int cost, string psf, int** mem1, vector<vector<vector<string>>> mem2){
+    //Base Case 1
+    if(row == (n-1) && col == (m-1)){
+        cost += matrix[row][col];
+        if(cost < finalAns){
+            finalOutput.clear();
+            finalOutput.push_back(psf);
+        }
+        else if(cost == finalAns){
+            finalOutput.push_back(psf);
+        }
+        finalAns = min(finalAns, cost);
+        mem1[row][col] = finalAns;
+        for(auto s: finalOutput){
+            mem2[row][col].push_back(s);
+        }
+        
+        return;
+    }
+
+     //Base Case2
+    if(row >= n || col >= m){
+        return;
+    }
+
+    //Check if ans already existing
+    if(mem1[row][col] != -1){
+        finalAns = mem1[row][col];
+        vector<string> temp = mem2[row][col];
+        for(auto j: temp){
+            finalOutput.push_back(j);
+        }
+        return;
+    }
+
+
+    //Recursive Calls
+    printPaths(matrix, n, m, row+1, col, cost+matrix[row][col], psf+"V", mem1, mem2);
+    printPaths(matrix, n, m, row, col+1, cost+matrix[row][col], psf+"H", mem1, mem2);
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+
+    int** matrix  = new int*[n];
+    for(int i = 0; i < n; i++){
+        matrix[i] = new int[m];
+    }
+
+    //Taking input in the matrix
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            cin >> matrix[i][j];
+        }
+    }
+
+    //mem array
+    int** mem = new int*[n];
+    for(int i = 0; i < n; i++){
+        mem[i] = new int[m];
+        for(int j = 0; j < m; j++){
+            mem[i][j] = -1;
+        }
+    }
+
+    vector<vector<vector<string>>> mem2(n, vector<vector<string>>(m, vector<string>()));
+    
+    //Calling the function
+    printPaths(matrix, n, m, 0, 0, 0, "", mem, mem2);
+
+    //Printing the Output
+    cout << finalAns << endl;
+    for(auto i: finalOutput){
+        cout << i << endl;
+    }
+
+    return 0;
+}
