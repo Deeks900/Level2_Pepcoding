@@ -1,0 +1,59 @@
+//Recursive Solution
+#include<bits/stdc++.h>
+using namespace std;
+
+int finalAns = INT_MAX;
+vector<string> finalOutput;
+
+void printPaths(int** matrix, int n, int m, int row, int col, int cost, string psf){
+    //Base Case 1
+    if(row == (n-1) && col == (m-1)){
+        cost += matrix[row][col];
+        if(cost < finalAns){
+            finalOutput.clear();
+            finalOutput.push_back(psf);
+        }
+        else if(cost == finalAns){
+            finalOutput.push_back(psf);
+        }
+        finalAns = min(finalAns, cost);
+        return;
+    }
+     
+    //Base Case2
+    if(row >= n || col >= m){
+        return;
+    }
+
+    //Recursive Calls
+    printPaths(matrix, n, m, row+1, col, cost+matrix[row][col], psf+"V");
+    printPaths(matrix, n, m, row, col+1, cost+matrix[row][col], psf+"H");
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+
+    int** matrix  = new int*[n];
+    for(int i = 0; i < n; i++){
+        matrix[i] = new int[m];
+    }
+
+    //Taking input in the matrix
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            cin >> matrix[i][j];
+        }
+    }
+
+    //Calling the function
+    printPaths(matrix, n, m, 0, 0, 0, "");
+
+    //Printing the Output
+    cout << finalAns << endl;
+    for(auto i: finalOutput){
+        cout << i << endl;
+    }
+
+    return 0;
+}
