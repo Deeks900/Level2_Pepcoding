@@ -1,0 +1,117 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class custom{
+    public:
+    int i;
+    int j;
+    string psf;
+
+    custom(int i, int j, string psf){
+        this->i = i;
+        this->j = j;
+        this->psf = psf;
+    }
+};
+
+void printPaths(int** matrix, int n, int m){
+    //Make a DP Array
+    int** dp = new int*[n];
+    for(int i = 0; i < n; i++){
+        dp[i] = new int[m];
+    }
+
+    //Filling the cost matrix
+    for(int i = (n-1); i >= 0; i--){
+        for(int j = (m-1); j >= 0; j--){
+            //if we are at the destination
+            if(i == (n-1) && j == (m-1)){
+                dp[i][j] = matrix[i][j];
+            }
+            //if we are at the last row
+            else if(i==(n-1)){
+                dp[i][j] = (matrix[i][j]+dp[i][j+1]);
+            }
+            //if we are at the last column
+            else if(j==(m-1)){
+                dp[i][j] = (matrix[i][j]+dp[i+1][j]);
+            }
+            //rest of the column are having two choices
+            else{
+                dp[i][j] = (min(dp[i+1][j], dp[i][j+1])+matrix[i][j]);
+            }
+        }
+    }
+
+    cout << dp[0][0] << endl;
+
+    //Now printing the paths
+    queue<custom> pendingVertices;
+    custom c(0, 0, "");
+    pendingVertices.push(c);
+    while(!pendingVertices.empty()){
+       custom vertices = pendingVertices.front();
+       pendingVertices.pop();
+       int row = vertices.i;
+       int col = vertices.j;
+       string psf = vertices.psf;
+
+       //Now check if we have react the destination
+       if((row == (n-1)) && (col==(m-1))){
+           cout << psf << endl;
+       }
+       //we are at the last row
+       else if(row == (n-1)){
+           custom temp(row, col+1, psf+"H");
+           pendingVertices.push(temp);
+       }
+       //we are at the last colums
+       else if(col == (m-1)){
+           custom temp(row+1, col, psf+"V");
+           pendingVertices.push(temp);
+       }
+       //rest of the column
+       else{
+           //if horizontal is less
+           if(dp[row][col+1] < dp[row+1][col]){
+               custom temp(row, col+1, psf+"H");
+               pendingVertices.push(temp);
+           }
+           //if vertical is less
+           else if(dp[row][col+1] > dp[row+1][col]){
+               custom temp(row+1, col, psf+"V");
+               pendingVertices.push(temp);
+           }
+           //Both are equal
+           else{
+               custom temp2(row+1, col, psf+"V");
+               pendingVertices.push(temp2);
+               custom temp(row, col+1, psf+"H");
+               pendingVertices.push(temp);
+               
+           }
+       }
+
+    }
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+
+    int** matrix = new int*[n];
+    for(int i = 0; i < n; i++){
+        matrix[i] = new int[m];
+    }
+
+    //Taking input in the array
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            cin >> matrix[i][j];
+        }
+    }
+
+    //calling the function
+    printPaths(matrix, n, m);
+    return 0;
+}
