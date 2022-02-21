@@ -1,0 +1,95 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class custom{
+    public:
+    int i;
+    string psf;
+
+    custom(int i, string psf){
+        this->i = i;
+        this->psf = psf;
+    }
+};
+
+void minimumJumps(int* arr, int n){
+    int* dp = new int[n];
+    dp[n-1] = 0;
+
+    for(int i = (n-2); i >= 0; i--){
+        //if zero is present here
+      
+        if(arr[i] == 0){
+            dp[i] = -1;
+        }
+        else{
+            int minAns = INT_MAX;
+            int jumpsAllowed = arr[i];
+            for(int jump = 1; jump <= jumpsAllowed; jump++){
+                if(((i+jump) < n) && (dp[i+jump] != -1)){
+                    int tempAns = (1+dp[i+jump]);
+                    minAns = min(minAns, tempAns);
+                }
+            }
+            if(minAns == INT_MAX){
+                dp[i] = -1;
+            }
+            else{
+                dp[i] = minAns;
+            }
+            
+        }  
+    }
+    
+    cout << dp[0] << endl;
+
+    //Now working on printing the path part
+    queue<custom> pendingVertices;
+    custom c(0, ""+to_string(0)+" -> ");
+    pendingVertices.push(c);
+
+    while(!pendingVertices.empty()){
+        custom front = pendingVertices.front();
+        pendingVertices.pop();
+        int index = front.i;
+        string psf = front.psf;
+        
+        //we reached the target
+        if(index == (n-1)){
+            cout << psf << endl;
+        }
+
+        int jumpsAllowed = arr[index];
+        for(int jump=1; jump<=jumpsAllowed; jump++){
+            if(((index+jump) < n) && (dp[index+jump] != -1)){
+                    if(dp[index+jump] == (dp[index]-1)){
+                        
+                        if((index+jump) != (n-1)){
+                            custom temp((index+jump), psf+to_string((index+jump))+" -> ");
+                            pendingVertices.push(temp);
+                        }
+                        else{
+                            custom temp((index+jump), psf+to_string((index+jump))+" .");
+                            pendingVertices.push(temp);
+                        }
+                        
+                        
+                    }
+            }
+             
+        }
+    }
+}
+
+int main(){
+    int n;
+    cin >> n;
+    int* arr = new int[n];
+
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+
+    minimumJumps(arr, n);
+    return 0;
+}
