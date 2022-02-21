@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int finalMax = INT_MIN;
+vector<string> indexes;
+void knapsack(int n, int* values, int* weights, int cap, string psf, int maxVal, int idx){
+    //Base Case
+    if(idx == n){
+        if(cap >= 0){
+          
+            if(maxVal > finalMax){  
+                finalMax = maxVal;
+                indexes.clear();
+                indexes.push_back(psf);
+            }
+            else if(maxVal == finalMax){
+                indexes.push_back(psf);
+            }
+        }
+        return;
+    }
+
+    //Recursive Call
+    knapsack(n, values, weights, cap, psf, maxVal, idx+1);
+    if(cap >= weights[idx]){
+        knapsack(n, values, weights, cap-weights[idx], psf+to_string(idx)+" ", maxVal+values[idx], idx+1);
+    }
+    
+}
+
+int main(){
+    int n;
+    cin >> n;
+
+    int* values = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> values[i];
+    }
+
+    int* weights = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> weights[i];
+    }
+
+    int capacity;
+    cin >> capacity;
+
+    knapsack(n, values, weights, capacity, "", 0, 0);
+    cout << finalMax << endl;
+    for(auto i: indexes){
+        cout << i << endl;
+    }
+    return 0;
+}
