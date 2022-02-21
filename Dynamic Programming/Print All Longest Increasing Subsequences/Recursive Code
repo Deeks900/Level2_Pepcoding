@@ -1,0 +1,48 @@
+//Recursive Code
+#include<bits/stdc++.h>
+using namespace std;
+
+int maxLength = INT_MIN;
+vector<string> path;
+void longestSubs(int* arr, int n, int count, int great, string psf, int idx){
+    //Base Case
+    if(idx == n){
+       if(count > maxLength){
+           maxLength = count;
+           path.clear();
+           path.push_back(psf);
+       }
+       else if(count == maxLength){
+           path.push_back(psf);
+       } 
+       return;
+    }
+
+    //Recursive Calls
+    if(arr[idx] > great){
+        longestSubs(arr, n, count+1, arr[idx], psf+to_string(arr[idx])+" -> ", idx+1);
+    }
+    longestSubs(arr, n, count, great, psf, idx+1);
+    
+    
+}
+
+int main(){
+    int n;
+    cin >> n;
+
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+
+    longestSubs(arr, n, 0, INT_MIN, "", 0);
+    cout << maxLength << endl;
+    for(auto i: path){
+        for(int j = 0; j < (i.size()-4); j++){
+            cout << i[j];
+        }
+        cout << endl;
+    }
+    return 0;
+}
