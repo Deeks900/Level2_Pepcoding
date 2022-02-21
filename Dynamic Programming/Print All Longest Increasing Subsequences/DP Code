@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class custom{
+    public:
+    int i;
+    string psf;
+
+    custom(int i, string psf){
+        this->i = i;
+        this->psf = psf;
+    }
+};
+void printSubs(int* arr, int n){
+    int* dp = new int[n];
+    dp[0] = 1;
+
+    for(int i = 1; i < n; i++){
+        int maxAns = INT_MIN;
+        for(int j = (i-1); j >= 0; j--){
+            if(arr[j] < arr[i]){
+                maxAns = max(maxAns, dp[j]);
+            }
+        }
+        if(maxAns == INT_MIN){
+            dp[i] = 1;
+        }
+        else
+        dp[i] = (maxAns+1);
+    }
+
+    int finalMax = INT_MIN;
+    for(int i = 0; i < n; i++){
+        finalMax = max(finalMax, dp[i]);
+    }
+
+    cout << finalMax << endl;
+
+    //Printing the paths
+    queue<custom> pendingVertices;
+    for(int i = 0; i < n; i++){
+        if(dp[i] == finalMax){
+            custom c(i, ""+to_string(arr[i]));
+            pendingVertices.push(c);
+        }
+    }
+
+    while(!pendingVertices.empty()){
+        custom front = pendingVertices.front();
+        pendingVertices.pop();
+        int index = front.i;
+        string psf = front.psf;
+
+        if(dp[index] == 1){
+            cout << psf << endl;
+        }
+        for(int i = (index-1); i >= 0; i--){
+            if(arr[i] < arr[index]){
+                if(dp[i] == (dp[index]-1)){
+                    custom temp(i, to_string(arr[i])+" -> "+psf);
+                    pendingVertices.push(temp);
+                }
+            }
+        }
+    }
+}
+
+int main(){
+    int n;
+    cin >> n;
+
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+
+    printSubs(arr, n);
+    return 0;
+}
