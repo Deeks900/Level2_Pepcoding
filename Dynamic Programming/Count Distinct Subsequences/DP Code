@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+long countSubs(string input){
+    long* dp = new long[input.size()+1];
+    dp[0] = 1;
+    unordered_map<char, int> lastOccurence;
+    for(int i = 1; i <= input.size(); i++){
+        dp[i] = (2*dp[i-1]);
+        if(lastOccurence.find(input[i-1]) != lastOccurence.end()){
+            int lastIndex = lastOccurence[input[i-1]];
+            dp[i] -= dp[lastIndex-1];
+        }
+        lastOccurence[input[i-1]] = i;
+    }
+    return (dp[input.size()]-1);
+}
+
+int main(){
+    string input;
+    cin >> input;
+
+    cout << countSubs(input);
+    return 0;
+}
