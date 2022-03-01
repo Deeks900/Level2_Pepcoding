@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> finalAns;
+bool ansBool = false;
+
+void printAllPath(int n, int* arr, int target, int idx, vector<int> psf, int sumTillNow){
+    //Base Case
+    if(idx == n){
+        if(sumTillNow == target){
+            ansBool = true;
+            for(auto i: psf){
+                finalAns.push_back(i);
+            }
+            finalAns.push_back(-1);
+        }
+        return;
+    }
+
+    //Recursive Calls
+    printAllPath(n, arr, target, idx+1, psf, sumTillNow);
+    psf.push_back(idx);
+    printAllPath(n, arr, target, idx+1, psf, sumTillNow+arr[idx]);
+    psf.pop_back();
+   
+}
+
+int main(){
+    int n;
+    cin >> n; 
+
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+
+    int target;
+    cin >> target;
+ vector<int> psf;
+    printAllPath(n, arr, target, 0, psf, 0);
+    if(ansBool == true){
+        cout << "true" << endl;
+        for(auto i: finalAns){
+            if(i == -1){
+                cout << endl;
+            }
+            else{
+                cout << i << " ";
+            }
+        }
+        cout << endl;
+    }
+    else{
+        cout << "false" << endl;
+    }
+
+    return 0;
+}
