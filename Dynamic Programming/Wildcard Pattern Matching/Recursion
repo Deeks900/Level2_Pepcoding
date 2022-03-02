@@ -1,0 +1,41 @@
+//Recursive Code
+class Solution {
+public:
+    bool isMatchHelper(string s, string p, int sp, int pp){
+        //Base Case1
+        if((sp == s.length()) && (pp == p.length())){
+            return true;
+        }
+        //Base Case2
+        if(sp == s.length()){
+            if(p[pp] == '*')
+                return (true&&isMatchHelper(s, p, sp, pp+1));
+            return false;
+        }
+        //Base Case3
+        if(pp == p.size()){
+            return false;
+        }
+        
+        //Recursive Calls
+        bool ans;
+        if(p[pp] == s[sp]){
+            ans = isMatchHelper(s, p, sp+1, pp+1);
+        }
+        else if(p[pp] == '?'){
+            ans = isMatchHelper(s, p, sp+1, pp+1);
+        }
+        else if(p[pp] == '*'){
+            bool ans1 = isMatchHelper(s, p, sp, pp+1);
+            bool ans2 = isMatchHelper(s, p, sp+1, pp);
+            ans = (ans1||ans2);
+        }
+        
+        return ans;
+    }
+    
+    bool isMatch(string s, string p) {
+        bool ans = isMatchHelper(s, p, 0, 0);
+        return ans;
+    }
+};
