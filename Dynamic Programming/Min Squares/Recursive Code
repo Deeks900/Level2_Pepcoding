@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int minSquares(int n){
+    //Base Case
+    if(n == 0){
+        return 0;
+    }
+    //Recursive Calls
+    int ans = INT_MAX;
+    for(int i = 1; i <= sqrt(n); i++){
+        int tempAns = (minSquares(n-(i*i))+1);
+        ans = min(ans, tempAns);
+    }
+    
+    return ans;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    cout << minSquares(n) << endl;
+    return 0;
+}
