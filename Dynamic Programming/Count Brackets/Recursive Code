@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int countBrackets(int n){
+   //Base Case
+   if(n == 0 || n == 1){
+       return 1;
+   }
+   
+   //Recursive Calls
+   int ans = 0;
+   for(int i = 0; i < n; i++){
+       ans += countBrackets(i)*countBrackets(n-i-1);
+   }
+   
+   return ans;
+}
+int main(){
+    int n;
+    cin >> n;
+    
+    cout << countBrackets(n);
+    return 0;
+}
