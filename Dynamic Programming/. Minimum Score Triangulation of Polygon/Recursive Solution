@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int minScoreHelper(vector<int>& values, int i, int j){
+        //Base Case1
+        if(i == j){
+            return 0;
+        }
+        
+        //Base Case2
+        if((j-i) == 1){
+            return 0;
+        }
+        
+        //Recursive Calls
+        int finalAns = INT_MAX;
+        for(int k = (i+1); k < j; k++){
+            int ansMine = (values[i]*values[k]*values[j]);
+            int ansLeft = minScoreHelper(values, i, k);
+            int ansRight = minScoreHelper(values, k, j);
+            int totalSum = (ansMine+ansLeft+ansRight);
+            finalAns = min(finalAns, totalSum);
+        }
+        
+        return finalAns;
+    }
+    
+    int minScoreTriangulation(vector<int>& values) {
+        int** dp = new int
+        return minScoreHelper(values, 0, values.size()-1);
+    }
+};
