@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int matrixChain(int n, int* arr){
+    
+    int**dp = new int*[n];
+    for(int i = 0; i < n; i++){
+        dp[i] = new int[n];
+        for(int j = 0; j < n; j++){
+            dp[i][j] = -1;
+        }
+    }
+    
+    for(int gap = 0; gap < n; gap++){
+        for(int i = 0, j = gap; j < n; i++, j++){
+            //if gap is zero
+            if(gap == 0){
+                dp[i][j] = 0;
+            }
+            else if(gap == 1){
+                dp[i][j] = 0;
+            }
+            else if(gap == 2){
+                dp[i][j] = (arr[i]*arr[i+1]*arr[j]);
+            }
+            //rest of the cells
+            else{
+                int finalAns = INT_MAX;
+                for(int k = (i+1); k<j; k++){
+                    int leftSum = dp[i][k];
+                    int rightSum = dp[k][j];
+                    int totalSum = (leftSum+rightSum+(arr[i]*arr[k]*arr[j]));
+                    finalAns = min(finalAns, totalSum);
+                }
+                dp[i][j] = finalAns;
+            }
+        }
+    }
+    
+    return dp[0][n-1];
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+   
+    cout << matrixChain(n, arr);
+    return 0;
+}
