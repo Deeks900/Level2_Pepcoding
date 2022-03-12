@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+ int maxCoinsHelper(vector<int>& nums){
+        //Base Case
+        if(nums.size() == 0){
+            return 0;
+        }
+        
+        if(nums.size() == 1){
+            return nums[0];
+        }
+        
+       //Recursive Calls
+        int ans = INT_MIN;
+        for(int k = 0; k < nums.size(); k++){
+            int currAns = nums[k];
+            if(k == 0 || k == (nums.size()-1)){
+                if(k == 0){
+                    currAns *= nums[k+1];
+                }
+                else{
+                    currAns *= nums[k-1];
+                }
+            }
+            else{
+                currAns *= nums[k-1];
+                currAns *= nums[k+1];
+            }
+            vector<int> temp;
+            for(int z = 0; z < nums.size(); z++){
+                if(z != k){
+                    temp.push_back(nums[z]);
+                }
+            }
+            int tempAns = (maxCoinsHelper(temp)+currAns); 
+            ans = max(ans, tempAns);
+        }
+        
+        return ans;
+    }
+int main(){
+    int n;
+    cin >> n;
+    
+    vector<int> nums;
+    for(int i = 0; i < n; i++){
+        int elem;
+        cin >> elem;
+        nums.push_back(elem);
+    }
+    
+    cout << maxCoinsHelper(nums) << endl;
+    return 0;
+}
