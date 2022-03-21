@@ -1,0 +1,92 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int solution(string str, int start, int end, bool isTrue){
+    //Base Case1
+    if(start > end){
+       return 0; 
+    }
+    
+    //Base Case2
+    if(start == end){
+        if(isTrue){
+          if(str[start] == 'T'){
+               
+              return 1;
+          } 
+          else{
+              return 0;
+          }
+        }
+        else{
+            if(str[start] == 'T'){
+              return 0;
+          } 
+          else{
+              return 1;
+          }
+        }
+
+    }
+    
+    int ans = 0;
+    
+    //Recursive Calls
+    for(int k = start+1; k < end; k=k+2){
+        int leftAns1 = solution(str, start, k-1, true);
+        int leftAns2 = solution(str, start, k-1, false);
+        int rightAns1 = solution(str, k+1, end, true);
+        int rightAns2 = solution(str, k+1, end, false);
+        
+        //Now check which operator K is
+        if(str[k] == '&'){
+            if(isTrue){
+                ans += (leftAns1*rightAns1);
+                
+            }
+            else{
+               ans += (leftAns1*rightAns2+leftAns2*rightAns1+leftAns2*rightAns2); 
+            }
+            
+        }
+        else if(str[k] ==  '^'){
+            if(isTrue){
+                ans += (leftAns1*rightAns2+leftAns2*rightAns1);
+            }
+            else{
+                ans += (leftAns1*rightAns1+leftAns2*rightAns2);
+            }
+            
+        }
+        else{
+            if(isTrue){
+                ans += (leftAns1*rightAns1+leftAns1*rightAns2+leftAns2*rightAns1);
+            }
+            else{
+               ans += (leftAns2*rightAns2); 
+            }
+           
+        }
+    }
+
+    return ans;
+}
+
+int main(){
+    string expr;
+    cin >> expr;
+    
+    string oper;
+    cin >> oper;
+    
+    string temp = "";
+    for(int i = 0; i < expr.size(); i++){
+        temp += expr[i];
+        if(i < oper.size()){
+            temp+=oper[i];
+        }
+    }
+    
+    cout << solution(temp, 0, temp.size()-1, true);
+    return 0;
+}
