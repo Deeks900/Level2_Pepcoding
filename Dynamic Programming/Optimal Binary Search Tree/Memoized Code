@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int obst(int n, int* frequency, int start, int end, int** mem){
+    //Base Case
+    if((start > end)){
+        return 0;
+    }
+    
+    if(start == end){
+        return frequency[start];
+    }
+    
+    if(mem[start][end] != -1){
+        return mem[start][end];
+    }
+     int fs = 0;
+        for(int z = start; z <= end; z++){
+            fs += frequency[z];
+        }
+    int finalAns = INT_MAX;
+    //Recursive Calls
+    for(int k = start; k <= end; k++){
+        int costLeft = obst(n, frequency, start, k-1, mem);
+        int costRight = obst(n, frequency, k+1, end, mem);
+       
+        int totalAns = (costLeft+costRight+fs);
+        finalAns = min(finalAns, totalAns);
+    }
+    
+    mem[start][end] = finalAns;
+    return finalAns;
+}
+
+int main(){
+    int n;
+    cin >> n; 
+    
+    int* nodes = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> nodes[i];
+    }
+    
+    int* frequency = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> frequency[i];
+    }
+
+    int** mem = new int*[n];
+    for(int i = 0; i < n; i++){
+        mem[i] = new int[n];
+        for(int j = 0; j < n; j++){
+            mem[i][j] = -1;
+        }
+    }
+    cout << obst(n, frequency, 0, n-1, mem);
+    return 0;
+}
