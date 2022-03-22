@@ -77,7 +77,12 @@ int solution(string str, int start, int end, bool isTrue, int** waysTrue, int** 
            
         }
     }
-
+    if(isTrue){
+        waysTrue[start][end] = ans;
+    }
+    else{
+        waysFalse[start][end] = ans;
+    }
     return ans;
 }
 
