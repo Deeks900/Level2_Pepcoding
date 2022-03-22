@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int solution(string expr, string opr){
+    
+   int** trueWays = new int*[expr.size()];
+   for(int i = 0; i < expr.size(); i++){
+       trueWays[i] = new int[expr.size()];
+   }
+   
+   int** falseWays = new int*[expr.size()];
+   for(int i = 0; i < expr.size(); i++){
+       falseWays[i] = new int[expr.size()];
+   }
+   
+   for(int gap = 0; gap < expr.size(); gap++){
+       for(int i = 0, j = gap; j < expr.size(); j++, i++){
+           
+           //if gap is zero
+           if(gap == 0){
+               char ch = expr[i];
+               if(ch == 'T'){
+                   trueWays[i][j] = 1;
+                   falseWays[i][j] = 0;
+               }
+               else{
+                   trueWays[i][j] = 0;
+                   falseWays[i][j] = 1;
+                   
+               }
+               // trueWays[i][j] = (expr[i]=='T');
+               //  = (expr[i]=='F');
+           }
+           
+           //rest of the cells
+           else{
+              trueWays[i][j] = 0;
+              falseWays[i][j] = 0;
+               for(int k = i; k < j; k++){
+                   char op = opr[k];
+                   int ltc = trueWays[i][k];
+                   int rtc = trueWays[k+1][j];
+                   int lfc = falseWays[i][k];
+                   int rfc = falseWays[k+1][j];
+                   
+               if(op == '&'){
+                   trueWays[i][j] += (ltc*rtc);
+                   falseWays[i][j] += (lfc*rfc+ltc*rfc+lfc*rtc);
+               }
+               
+               else if(op == '|'){
+                   trueWays[i][j] += (ltc*rtc+lfc*rtc+ltc*rfc);
+                   falseWays[i][j] += (lfc*rfc);
+               }
+               
+               else{
+                   trueWays[i][j] += (lfc*rtc+ltc*rfc);
+                   falseWays[i][j] += (lfc*rfc+ltc*rtc);
+               }
+               }
+               
+           }
+       }
+   }
+   
+   return trueWays[0][expr.size()-1];
+}
+
+int main(){
+    string expr;
+    cin >> expr;
+    
+    string oper;
+    cin >> oper;
+  
+    cout << solution(expr, oper);
+    return 0;
+}
