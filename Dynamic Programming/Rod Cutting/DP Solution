@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int rodCutting(int n, int* prices){
+    int*dp = new int[n+1];
+    dp[0] =0;
+    dp[1] = prices[0];
+    for(int z = 2; z <= n; z++){
+        dp[z]=INT_MIN;
+        for(int k = 1; k<=z; k++){
+            dp[z] = max(dp[z], prices[k-1]+dp[z-k]);
+        }
+    }
+    return dp[n];
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    int* prices = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> prices[i];
+    }
+    
+    cout << rodCutting(n, prices);
+    return 0;
+}
