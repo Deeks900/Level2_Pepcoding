@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int rodCutting(int n, int* prices, int len, int* mem){
+    //Base Case
+    if(len == 0 || len < 0){
+        return 0;
+    }
+    if(len == 1){
+        return prices[len-1];
+    }
+    
+    if(mem[len] != -1){
+        return mem[len];
+    }
+    
+    int finalAns = INT_MIN;
+    //Recursive Calls
+    for(int i = 1; i <= len; i++){
+        int ans = (prices[i-1]+rodCutting(n, prices, len-i, mem));
+        finalAns = max(finalAns, ans);   
+    }
+    
+    mem[len] = finalAns;
+    return finalAns;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    int* prices = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> prices[i];
+    }
+    
+    int* mem = new int[n+1];
+    for(int i = 0; i <= n; i++){
+        mem[i] = -1;
+    }
+    cout << rodCutting(n, prices, n, mem);
+    return 0;
+}
