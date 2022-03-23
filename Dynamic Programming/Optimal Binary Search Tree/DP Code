@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int obst(int n, int* frequency, int* nodes){
+    int** dp = new int*[n];
+    for(int i = 0; i < n; i++){
+        dp[i] = new int[n];
+    }
+    
+    for(int gap = 0; gap < n; gap++){
+        for(int i = 0, j = gap; j < n; i++, j++){
+            //if gap is zero
+            if(gap == 0){
+                dp[i][j] = frequency[i];
+            }
+            //rest of the cells
+            else{
+               dp[i][j] = INT_MAX;
+                int fs = 0;
+                for(int z = i; z <= j; z++){
+                    fs += frequency[z];
+                }
+                for(int k = i; k <= j; k++){
+                    int leftCost = 0;
+                    int rightCost = 0;
+                    if((k-1) >= 0){
+                        leftCost = dp[i][k-1];
+                    }
+                    if((k+1) <= j){
+                        rightCost = dp[k+1][j];
+                    }
+                    int totalCost = (leftCost+rightCost+fs);
+                    dp[i][j] = min(dp[i][j], totalCost);
+                }
+            }
+        }
+    }
+    return dp[0][n-1];
+}
+
+int main(){
+    int n;
+    cin >> n; 
+    
+    int* nodes = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> nodes[i];
+    }
+    
+    int* frequency = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> frequency[i];
+    }
+
+    cout << obst(n, frequency, nodes);
+    return 0;
+}
